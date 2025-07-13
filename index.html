@@ -1,7 +1,97 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Welcome</title>
+    <style>
+        body {
+            text-align: center;
+            padding-top: 50px;
+            margin: 0;
+        }
+
+        .avatar-container {
+            position: relative;
+            display: inline-block;
+        }
+        
+        #avatar-img {
+            border-radius: 15px;
+        }
+
+        .eyes {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        .eye {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: transparent;
+            border-radius: 50%;
+            /*border: 4px solid black;*/
+            /* Guessed positions for the eyes, now in percentages */
+            top: 37%; 
+        }
+
+        #left-eye {
+            left: 40%;
+            top: 35%;
+        }
+
+        #right-eye {
+            right: 12%;
+            top: 30%;
+        }
+
+        .pupil {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: black;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: transform 0.1s ease-out;
+        }
+    </style>
+</head>
 <body>
-<h1>Hello World</h1>
-<p>I'm hosted with GitHub Pages.</p>
+    <div class="avatar-container">
+        <img src="avatar.png" alt="Avatar" width="300" id="avatar-img">
+        <div class="eyes">
+            <div class="eye" id="left-eye">
+                <div class="pupil"></div>
+            </div>
+            <div class="eye" id="right-eye">
+                <div class="pupil"></div>
+            </div>
+        </div>
+    </div>
+
+<script>
+    document.addEventListener('mousemove', (e) => {
+        const eyes = document.querySelectorAll('.eye');
+        eyes.forEach(eye => {
+            const rect = eye.getBoundingClientRect();
+            const eyeCenterX = rect.left + rect.width / 2;
+            const eyeCenterY = rect.top + rect.height / 2;
+            
+            const angle = Math.atan2(e.clientY - eyeCenterY, e.clientX - eyeCenterX);
+            
+            const maxPupilMove = eye.offsetWidth / 2 - eye.querySelector('.pupil').offsetWidth / 2 - 2;
+
+            const pupilX = maxPupilMove * Math.cos(angle);
+            const pupilY = maxPupilMove * Math.sin(angle);
+            
+            const pupil = eye.querySelector('.pupil');
+            pupil.style.transform = `translate(-50%, -50%) translate(${pupilX}px, ${pupilY}px)`;
+        });
+    });
+</script>
 </body>
 </html>
